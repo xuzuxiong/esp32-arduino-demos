@@ -295,7 +295,11 @@ static bool applyOneControl(String action, String valueStr) {
   }
 
   if (action == "upgrade") {
-    otaUpgrade.upgradeFromURL("http://dy.xuzuxiong.com/upgrade.bin");
+    if (valueStr.length() > 0 && valueStr.startsWith("http")) {
+      otaUpgrade.upgradeFromURL(valueStr);
+    } else {
+      otaUpgrade.upgradeFromURL(OTA_FIRMWARE_URL);
+    }
     return true;
   }
 
@@ -340,7 +344,7 @@ static void applySimpleOrWhole(const String& message) {
     return;
   }
   if (msg == "upgrade") {
-    otaUpgrade.upgradeFromURL("http://dy.xuzuxiong.com/upgrade.bin");
+    otaUpgrade.upgradeFromURL(OTA_FIRMWARE_URL);
     return;
   }
 

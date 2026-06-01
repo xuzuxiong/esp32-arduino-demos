@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}设备{% endblock %}</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+
+<body>
+
+<!-- ==================== 导航栏 ==================== -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">设备</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNav" aria-controls="navbarNav"
+                aria-expanded="false" aria-label="切换导航">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="{{ url_for('main.dashboard') }}">控制面板</a>
+                </li>
+
+                <li class="nav-item">
+                    {% if not FREEZE_MODE or session.get('is_admin') %}
+                    <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#addDeviceModal">
+                        添加设备
+                    </a>
+                    {% else %}
+                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">
+                        添加设备（已冻结）
+                    </a>
+                    {% endif %}
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('main.logout') }}">登出</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('main.help') }}">帮助</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+{% if FREEZE_MODE %}
+<div class="alert alert-info text-center mb-0 rounded-0" role="alert">
+    <strong>Demo mode:</strong>
+    Registration and device binding may be restricted when <code>FREEZE_MODE=true</code>.
+    Cutoff date: <strong>{{ FREEZE_CUTOFF_DATE }}</strong>.
+    Configure in <code>.env</code> for your deployment.
+</div>
+{% endif %}
+
+<div class="alert alert-secondary text-center mb-0 rounded-0" role="alert">
+    <strong>Open-source reference UI.</strong>
+    This Flask service is provided as an example MQTT web backend for ESP32 devices.
+    Replace branding, sales copy, and contact info before production use.
+</div>
+
+<!-- ==================== 主内容 ==================== -->
+<main class="container mt-4">
+    {% block content %}
+    {% endblock %}
+</main>
+
+{% if not FREEZE_MODE or session.get('is_admin') %}
+<!-- ==================== 添加设备模态框 ==================== -->
+<div class="modal fade" id="addDeviceModal" tabindex="-1"
+     aria-labelledby="addDeviceModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="addDeviceModalLabel">添加设备</h5>
+                <button type="button" class="btn-close"
+                        data-bs-dismiss="modal" aria-label="关闭"></button>
+            </div>
+
+            <form method="POST" action="{{ url_for('device_controller.add_device') }}">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="device_id" class="form-label">设备 ID</label>
+                        <input type="text" class="form-control"
+                               id="device_id" name="device_id" required>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal">取消</button>
+                    <button type="submit"
+                            class="btn btn-primary">添加设备</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- ==================== 页脚 ==================== -->
+<footer class="text-center mt-5 py-3 bg-light">
+    <p class="mb-1">
+        本产品由官方团队独立运营，非官方渠道交易及历史售后问题请联系原销售方处理。
+    </p>
+    <p class="mb-0">
+        © 2025
+        网站备案号：蜀ICP备19001463号-1
+    </p>
+</footer>
+
+</body>
+</html>

@@ -1,25 +1,22 @@
 # Hardware / 硬件资料
 
-本目录用于存放与 DECQ 示例相关的硬件设计文件。
+本目录包含 DECQ 参考硬件的开源文档（非正式 PCB 工程文件）。
 
-## 当前状态
+## 已有资料
 
-仓库 **尚未包含** 原理图、PCB Gerber 或实物照片。固件中的引脚定义来自实际工程验证，详见 [docs/hardware.md](../docs/hardware.md)。
+| 文件 | 内容 |
+|------|------|
+| [BOM.md](BOM.md) | 物料清单与参考单价 |
+| [wiring-schematic.md](wiring-schematic.md) | 接线原理图（Mermaid + ASCII） |
+| [block-diagram.md](block-diagram.md) | 系统框图与软件模块关系 |
 
-## 后续可添加
+引脚与固件一致，详见 [docs/hardware.md](../docs/hardware.md)。
 
-- [ ] 原理图（PDF / KiCad / EasyEDA）
+## 待贡献（欢迎 PR）
+
+- [ ] KiCad / EasyEDA 原理图（`.sch` / PDF）
 - [ ] PCB 布局与 Gerber
-- [ ] 接线图 / 面包板搭建图
-- [ ] 实物照片
-- [ ] BOM 物料清单（含 PCM1808、CH9329、ESP32 模块等）
+- [ ] 实物搭建照片
+- [ ] 更详细的 PCM1808 模拟前端说明
 
-## 提交指南
-
-若你补充硬件资料，请确保：
-
-1. 不含客户 Logo、内部项目代号或私人地址
-2. 标注硬件 revision 与固件引脚表一致
-3. 在 PR 中说明适用的 ESP32 模块型号
-
-欢迎通过 Pull Request 贡献。
+请勿提交含客户 Logo 或私人地址的文件。

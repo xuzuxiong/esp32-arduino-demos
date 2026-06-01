@@ -1,0 +1,423 @@
+{% extends "base.html" %}
+
+{% block title %}控制面板{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>设备控制页面</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        /* 全局按钮样式 */
+       .btn-info {
+            background-color: #007bff !important;
+            border-color: #007bff !important;
+            color: white;
+        }
+
+       .btn-danger {
+            background-color: #dc3545 !important;
+            border-color: #dc3545 !important;
+            color: white;
+        }
+
+       .btn-success {
+            background-color: #28a745 !important;
+            border-color: #28a745 !important;
+            color: white;
+        }
+
+       .btn-warning {
+            background-color: #ffc107 !important;
+            border-color: #ffc107 !important;
+            color: black;
+        }
+
+        /* 激活状态样式 */
+       .activation-status {
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+
+       .activated {
+            background-color: #28a745;
+            color: white;
+        }
+
+       .not-activated {
+            background-color: #ffc107;
+            color: black;
+        }
+
+        /* DY设备样式 */
+       .dy-device {
+            background-color: #17a2b8;
+            color: white;
+        }
+
+        /* 加载中样式 */
+       .loading-spinner {
+            display: none;
+        }
+
+        /* 备注输入框样式调整 */
+        #device-list input[type="text"] {
+            width: 100px;
+            margin-right: 5px;
+            display: inline-block;
+        }
+
+        /* 保存按钮样式调整 */
+        #device-list button.btn-save {
+            padding: 4px 8px;
+            font-size: 12px;
+            display: inline-block;
+        }
+    </style>
+    <script>
+        // 更新设备列表
+        function updateDeviceList() {
+            $.ajax({
+                url: '/get_devices',
+                method: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    const deviceList = $('#device-list');
+                    deviceList.empty();
+
+                    data.devices.forEach(function (device) {
+                        const row = $('<tr>');
+                        const activationStatus = device.activated
+                           ? '<span class="activation-status activated">已激活</span>'
+                            : '<span class="activation-status not-activated">未激活</span>';
+
+                        // 设备样式
+                        if (device.device_id.startsWith('DY')) {
+                            row.addClass('table-info');
+                        } else {
+                            row.addClass(device.is_online? 'table-success' : 'table-secondary');
+                        }
+
+                        // 控制链接生成
+                        let controlUrl = '#';
+                        const deviceIdPrefix = device.device_id.slice(0, 2);
+                        if (deviceIdPrefix === 'DY') {
+                            controlUrl = `/dy/device_control/${device.device_id}`;
+                        } else if (device.activated) {
+                            if (deviceIdPrefix === 'KJ') {
+                                controlUrl = `/kj_handler/device_control/${device.device_id}`;
+                            } else if (deviceIdPrefix === 'DD') {
+                                controlUrl = `/dd/device_control/${device.device_id}`;
+                            } else if (deviceIdPrefix === 'DE') {
+                                controlUrl = `/de/device_control/${device.device_id}`;
+                            } else if (deviceIdPrefix === 'DF') {
+                                controlUrl = `/df/device_control/${device.device_id}`;
+                            } else if (deviceIdPrefix === 'DG') {
+                                controlUrl = `/dg/device_control/${device.device_id}`;
+                            } else if (deviceIdPrefix === 'DH') {
+                                controlUrl = `/dh/device_control/${device.device_id}`;
+                            } else if (deviceIdPrefix === 'DI') {
+                                controlUrl = `/di/device_control/${device.device_id}`;
+                            } else if (deviceIdPrefix === 'DJ') {
+                                controlUrl = `/dj/device_control/${device.device_id}`;
+                            } else if (deviceIdPrefix === 'HM') {
+                                controlUrl = `/hm/device_control/${device.device_id}`;
+                            }else if (deviceIdPrefix === 'HS') {
+                                controlUrl = `/hS/device_control/${device.device_id}`;
+                            }else if (deviceIdPrefix === 'ZS') {
+                                controlUrl = `/ZS/device_control/${device.device_id}`;
+                            }else if (deviceIdPrefix === 'LF') {
+                                controlUrl = `/lf/device_control/${device.device_id}`;
+                            }else if (deviceIdPrefix === 'SL') {
+                                controlUrl = `/sl/device_control/${device.device_id}`;
+                            }else if (deviceIdPrefix === 'XY') {
+                                controlUrl = `/xy/device_control/${device.device_id}`;
+                            }else if (deviceIdPrefix === 'CQ') {
+                                controlUrl = `/cq/device_control/${device.device_id}`;
+                            }
+                            
+                        }
+
+                        // 激活按钮状态处理
+                        const activationButton = device.activated
+                           ? `<button class="btn btn-success disabled">已激活</button>`
+                            : `<button class="btn btn-warning btn-activate-device" data-device-id="${device.device_id}">激活设备</button>`;
+
+                        row.html(`
+                            <td>${device.device_id}</td>
+                            <td>
+                                <input type="text" id="remark-${device.device_id}" value="${device.remark || ''}" class="form-control">
+                                <button onclick="saveRemark('${device.device_id}')" class="btn btn-sm btn-save">保存</button>
+                            </td>
+                            <td>${device.is_online? '在线' : '离线'}</td>
+                            <td>
+                                <a href="${controlUrl}" 
+                                   class="btn btn-info me-2 ${!(deviceIdPrefix === 'DY' || device.activated)? 'disabled opacity-50' : ''}" 
+                                   onclick="${!(deviceIdPrefix === 'DY' || device.activated)? 'Swal.fire(\'提示\', \'设备未激活，请先激活设备！\', \'info\')' : ''}"
+                                >
+                                    控制
+                                </a>
+                                
+                                ${device.device_id.startsWith('DY') 
+                                    ? `<span class="badge bg-info dy-device">自动激活</span>` 
+                                    : `${activationButton} ${activationStatus}`}
+                                
+                                <button class="btn btn-danger btn-delete-device" data-device-id="${device.device_id}">删除</button>
+                            </td>
+                        `);
+                        deviceList.append(row);
+                    });
+
+                    attachDeleteEvent();
+                    attachActivationEvent();
+                },
+                error: function (error) {
+                    console.error('获取设备列表失败:', error);
+                }
+            });
+        }
+
+        // 删除设备事件
+        function attachDeleteEvent() {
+            $('.btn-delete-device').on('click', function () {
+                const deviceId = $(this).data('device-id');
+                Swal.fire({
+                    title: '确认删除',
+                    text: `确定要删除设备 ${deviceId} 吗？`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: '删除',
+                    cancelButtonText: '取消'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: `/delete_device/${deviceId}`,
+                            method: 'DELETE',
+                            success: function (data) {
+                                if (data.error) {
+                                    Swal.fire('错误', data.error, 'error');
+                                } else {
+                                    Swal.fire('成功', '设备删除成功', 'success').then(() => updateDeviceList());
+                                }
+                            },
+                            error: function () {
+                                Swal.fire('失败', '删除设备失败，请重试', 'error');
+                            }
+                        });
+                    }
+                });
+            });
+        }
+
+        // 激活事件绑定
+        function attachActivationEvent() {
+            $('.btn-activate-device').on('click', function () {
+                const deviceId = $(this).data('device-id');
+                const isActivated = $(this).data('activated') === 'true';
+
+                if (isActivated) {
+                    Swal.fire('提示', '设备已激活，无需操作', 'info');
+                    return;
+                }
+
+                $('#activationModal').find('#targetDeviceId').val(deviceId);
+                $('#activationModal').modal('show');
+            });
+        }
+
+        // 保存备注
+        window.saveRemark = function (deviceId) {
+            const remark = $(`#remark-${deviceId}`).val();
+            $.ajax({
+                url: `/save_remark/${deviceId}`,
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ remark: remark }),
+                success: function (data) {
+                    if (data.error) {
+                        Swal.fire('错误', data.error, 'error');
+                    } else {
+                        Swal.fire('成功', '备注保存成功', 'success');
+                    }
+                },
+                error: function () {
+                    Swal.fire('失败', '保存备注失败，请重试', 'error');
+                }
+            });
+        }
+
+        // 执行设备激活
+        $(document).on('click', '#doActivateBtn', function () {
+            const deviceId = $('#targetDeviceId').val();
+            const activationCode = $('#activationCode').val();
+
+            if (!deviceId) {
+                Swal.fire('错误', '设备ID不能为空', 'error');
+                return;
+            }
+
+            if (!activationCode) {
+                Swal.fire('错误', '请输入激活码', 'error');
+                return;
+            }
+
+            $(this).prop('disabled', true);
+            $(this).html('<i class="fa fa-spinner fa-spin mr-2"></i> 激活中...');
+
+            $.ajax({
+                url: '/activate_device',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ device_id: deviceId, activation_code: activationCode }),
+                success: function (data) {
+                    if (data.error) {
+                        Swal.fire('错误', data.error, 'error');
+                    } else {
+                        Swal.fire({
+                            icon: 'success',
+                            title: '激活成功',
+                            text: data.message,
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(() => {
+                            updateDeviceList();
+                            $('#activationModal').modal('hide');
+                        });
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('请求失败，状态码:', jqXHR.status);
+                    let errorMsg = '激活请求失败，请重试';
+                    if (jqXHR.status === 403) errorMsg = '激活码无效或已过期';
+                    if (jqXHR.status === 404) errorMsg = '设备不存在';
+                    if (jqXHR.status === 500) errorMsg = '服务器内部错误';
+                    Swal.fire('失败', errorMsg, 'error');
+                },
+                complete: function () {
+                    $('#doActivateBtn').prop('disabled', false);
+                    $('#doActivateBtn').html('立即激活');
+                }
+            });
+        });
+
+        // 页面初始化
+        $(document).ready(function () {
+            updateDeviceList();
+            setInterval(updateDeviceList, 20000);
+        });
+    </script>
+</head>
+
+<body>
+    <div class="container mt-4">
+        <!-- Flash消息 -->
+        {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+        <div class="alert-area">
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+    <!-- 页面头部 -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+        <h1 class="h3 mb-0">设备控制中心</h1>
+        <div class="d-flex gap-2">
+            <a href="http://www.shuangfanlong.cn/player.html" 
+               class="btn btn-outline-primary btn-sm"
+               target="_blank">
+                📖 使用文档
+            </a>
+            {% if can_activate %}
+            <a href="{{ url_for('main.user_activation_stats') }}" 
+               class="btn btn-warning btn-sm"
+               style="min-width: 100px;">
+                📝 激活记录
+            </a>
+            {% endif %}
+            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addDeviceModal">
+                ➕ 添加设备
+            </button>
+        </div>
+    </div>
+
+        <!-- 设备列表 -->
+        <h3 class="mt-4">当前设备列表（自动刷新，每5秒更新）</h3>
+        <table class="table table-bordered" id="device-list">
+            <thead>
+                <tr>
+                    <th>设备ID</th>
+                    <th>备注设备名称</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <!-- 激活模态框 -->
+        <div class="modal fade" id="activationModal" tabindex="-1" aria-labelledby="activationModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form id="activationForm" class="px-4 py-3">
+                        <input type="hidden" id="targetDeviceId" name="device_id">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="activationModalLabel">设备激活</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="activationCode" class="form-label">激活码</label>
+                                <input type="text" class="form-control" id="activationCode" name="activation_code"
+                                       placeholder="请输入管理员分配的激活码（通常为手机号）" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                            <button type="button" class="btn btn-success" id="doActivateBtn">立即激活</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- 添加设备模态框 -->
+        <div class="modal fade" id="addDeviceModal" tabindex="-1" aria-labelledby="addDeviceModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form id="addDeviceForm" method="POST" action="{{ url_for('device_controller.add_device') }}">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addDeviceModalLabel">添加设备</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="device_id" class="form-label">设备ID</label>
+                                <input type="text" class="form-control" id="device_id" name="device_id" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                            <button type="submit" class="btn btn-primary">添加设备</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+{% endblock %}

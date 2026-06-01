@@ -26,7 +26,7 @@
 
 ## 功能列表
 
-### 已实现（v0.1.0）
+### 已实现（v0.1.x）
 
 | 模块 | 功能 |
 |------|------|
@@ -35,14 +35,17 @@
 | 人机界面 | SSD1306 OLED 128×32，6 路物理按键，NVS 持久化 |
 | 串口协议 | `MON,x,y` / `WALK,x,y` / `LOOT,x,y` 文本解析 |
 | 网络（可选） | WiFiManager 配网、MQTT 状态 JSON、远程 pause/resume、HTTP OTA 钩子 |
+| 配套服务端 | Flask MQTT Web 控制台（`server/mqtt_web_service/`，可选自建） |
 | 工具 | Windows `arduino-cli` 一键编译烧录脚本 |
+| CI | 工作流模板见 `tools/ci/compile.yml`（复制到 `.github/workflows/` 启用） |
+| 硬件文档 | BOM、接线原理图、系统框图（`hardware/`） |
+| 最小示例 | `examples/ch9329_mouse/`、`examples/i2s_energy_detect/` |
 
 ### 计划功能（未实现）
 
 - PlatformIO / ESP-IDF 工程
-- 独立 minimal 示例 sketch（纯 CH9329 / 纯 I2S）
-- 自动化测试与 CI 编译
-- 公开原理图 / PCB / BOM
+- KiCad 正式原理图 / PCB Gerber
+- Parser 单元测试、硬件在环自动化测试
 - 多频段音频分类、ML 事件识别
 
 ---
@@ -56,7 +59,7 @@
 | CH9329 | UART → USB HID |
 | SSD1306 | I2C 128×32 OLED |
 | 按键 ×6 | 上拉输入 |
-| 杜邦线 / PCB | 按 [docs/hardware.md](docs/hardware.md) 接线 |
+| 杜邦线 / PCB | [hardware/wiring-schematic.md](hardware/wiring-schematic.md)、[BOM.md](hardware/BOM.md) |
 
 ---
 
@@ -70,7 +73,7 @@
 | UART CH9329 RX / TX | 16 / 17 |
 | I2C OLED SDA / SCL | 21 / 22 |
 
-完整表格：[docs/hardware.md](docs/hardware.md)
+完整表格：[docs/hardware.md](docs/hardware.md) · [接线原理图](hardware/wiring-schematic.md) · [BOM](hardware/BOM.md)
 
 ---
 
@@ -173,8 +176,8 @@ MQTT connected
 
 | 版本 | 目标 |
 |------|------|
-| **v0.1.x** | 开源整理、文档、脱敏、DECQ 主固件 |
-| v0.2.x | 拆分 minimal examples、CI compile |
+| **v0.1.x** | 开源整理、文档、脱敏、DECQ 主固件、CI、BOM/接线图、minimal examples |
+| v0.2.x | KiCad 原理图、Parser 单元测试 |
 | v0.3.x | 硬件原理图 / BOM 社区贡献 |
 | 未来 | PlatformIO、Parser 单元测试 |
 
@@ -184,7 +187,8 @@ MQTT connected
 
 ```
 ├── firmware/DECQ/     # 主固件（Arduino sketch）
-├── docs/              # 硬件、固件、协议、音频、FAQ
+├── server/            # 可选 MQTT Web 后端（Flask）
+├── docs/              # 硬件、固件、协议、服务端、FAQ
 ├── examples/          # 配置与命令示例
 ├── hardware/          # 原理图占位（待贡献）
 ├── tools/             # build_upload.ps1
@@ -236,5 +240,6 @@ ESP32 Arduino demos: I2S/PCM1808 audio FFT detection + CH9329 UART HID keyboard/
 - [硬件说明](docs/hardware.md)
 - [固件说明](docs/firmware.md)
 - [协议说明](docs/protocol.md)
+- [服务端说明](docs/server.md)
 - [音频检测](docs/audio-detection.md)
 - [OpenAI Codex OSS 申请笔记](OPENAI_CODEX_OSS_APPLICATION_NOTES.md)

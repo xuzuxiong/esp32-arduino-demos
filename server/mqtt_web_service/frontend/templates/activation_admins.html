@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block title %}激活权限用户与设备记录{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>激活权限用户与设备记录</h2>
+        <div>
+            <!-- 搜索栏 -->
+            <form class="d-flex" method="GET" action="{{ url_for('main.activation_admins') }}">
+                <input type="text" 
+                       class="form-control me-2" 
+                       name="q" 
+                       placeholder="搜索设备ID/激活码/用户手机号"
+                       value="{{ q|default('') }}">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search"></i> 搜索
+                </button>
+            </form>
+            
+            <!-- 导出Excel按钮 -->
+            <a href="{{ url_for('main.export_activation_records') }}" 
+               class="btn btn-danger ms-3">
+                <i class="fas fa-file-excel"></i> 导出Excel
+            </a>
+        </div>
+    </div>
+
+    <!-- 统计卡片 -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <h5 class="card-title">激活权限用户数</h5>
+                    <p class="card-text fs-3">{{ admin_stats|length }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h5 class="card-title">总激活设备数</h5>
+                    <p class="card-text fs-3">
+                        {{ admin_stats|sum(attribute='total_activated_devices') }}
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-info text-dark">
+                <div class="card-body">
+                    <h5 class="card-title">人均激活设备数</h5>
+                    <p class="card-text fs-3">
+                        {% if admin_stats|length > 0 %}
+                            {{ "%.1f"|format(admin_stats|sum(attribute='total_activated_devices') / admin_stats|length) }}
+                        {% else %}
+                            0
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 激活权限用户列表 -->
+    {% for stat in admin_stats %}
+    <div class="card mb-4">
+        <div class="card-header bg-light">
+            <div class="d-flex justify-content-between align-items-center">
+                <h4>
+                    <span class="badge bg-success me-2">
+                        <i class="fas fa-user-shield"></i> {{ stat.user.phone }}
+                    </span>
+                    <small class="text-muted">
+                        (ID: {{ stat.user.id }}, 
+                        权限开启时间: {{ stat.user.activation_permission_start|datetime('%Y-%m-%d %H:%M')|default('未记录') }})
+                    </small>
+                </h4>
+                <div>
+                    <span class="badge bg-secondary">
+                        <i class="fas fa-key"></i> 激活码总数: {{ stat.activation_code_count }}
+                    </span>
+                    <span class="badge bg-info">
+                        <i class="fas fa-microchip"></i> 已激活设备: {{ stat.total_activated_devices }}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body">
+            {% if stat.device_records %}
+            <h5 class="mb-3">最近激活的设备记录</h5>
+            <div class="table-responsive">
+                <table class="table table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th>设备ID</th>
+                            <th>激活码</th>
+                            <th>激活时间</th>
+                            <th>设备状态</th>
+                            <th>绑定用户</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in stat.device_records %}
+                        <tr>
+                            <td>{{ record.device_id }}</td>
+                            <td>{{ record.activation_code.code }}</td>
+                            <td>{{ record.activated_at|datetime('%Y-%m-%d %H:%M') }}</td>
+                            <td>
+                                {% set device = record.device %}
+                                {% if device and device.status == 'active' %}
+                                    <span class="badge bg-success">活跃</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">非活跃/未绑定</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if device and device.bound_user %}
+                                    {{ device.bound_user.phone }}
+                                {% else %}
+                                    <span class="text-muted">未绑定</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i> 该用户尚未激活任何设备
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+
+    {% if not admin_stats %}
+    <div class="alert alert-warning text-center">
+        <i class="fas fa-exclamation-triangle"></i> 暂无具有激活权限的用户
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

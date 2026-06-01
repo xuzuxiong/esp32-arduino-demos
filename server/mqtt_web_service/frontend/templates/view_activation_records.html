@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}激活记录 - {{ code }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h3 class="mb-4">
+        激活码 <strong>{{ code }}</strong> 的激活记录
+        <small class="text-muted">(共 {{ logs|length }} 条记录)</small>
+    </h3>
+
+    <a href="{{ url_for('activation.activation_code_manage') }}" 
+       class="btn btn-secondary mb-3">
+        <i class="fas fa-arrow-left"></i> 返回激活码列表
+    </a>
+
+    <table class="table table-bordered">
+        <thead class="bg-info text-white">
+            <tr>
+                <th>设备ID</th>
+                <th>被激活用户</th>
+                <th>激活时间</th>
+                <th>激活者</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for log in logs %}
+            <tr>
+                <td>{{ log.device_id }}</td>
+                <td>
+                    {{ log.user.phone }}<br>
+                    <small>用户ID: {{ log.user.id }}</small>
+                </td>
+                <td>{{ log.activation_time|datetimeformat }}</td>
+                <td>
+                    {{ log.activation_code.creator.phone }}<br>
+                    <small>创建者ID: {{ log.activation_code.creator.id }}</small>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

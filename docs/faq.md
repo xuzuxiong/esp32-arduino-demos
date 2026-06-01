@@ -78,7 +78,7 @@
 
 ### Q: 本仓库有 MQTT 服务端吗？
 
-**A:** **没有。** 需自行部署 Mosquitto 等 Broker。协议说明见 [protocol.md](protocol.md)。
+**A:** 仓库 **v0.1.2+** 含可选参考实现 `server/mqtt_web_service/`（Flask + PostgreSQL + MQTT）。生产环境请复制 `.env.example` 自行部署，勿使用示例占位符。
 
 ---
 

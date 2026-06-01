@@ -1,0 +1,131 @@
+/* 设置全局字体和背景颜色 */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* 容器样式 */
+.container {
+    max-width: 450px;
+    width: 90%;
+    margin: 0 auto;
+    padding: 30px;
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease;
+}
+
+/* 鼠标悬停时容器微微上浮 */
+.container:hover {
+    transform: translateY(-5px);
+}
+
+/* 标题样式 */
+h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #333;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+/* 标签样式 */
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.9em;
+    color: #555;
+    font-weight: 500;
+}
+
+/* 输入框、选择框和按钮的通用样式 */
+input,
+select,
+button {
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 0.95em;
+    transition: border-color 0.3s ease;
+}
+
+/* 输入框和选择框获得焦点时的样式 */
+input:focus,
+select:focus {
+    outline: none;
+    border-color: #28a745;
+    box-shadow: 0 0 5px rgba(40, 167, 69, 0.3);
+}
+
+/* 按钮样式 */
+button {
+    background: linear-gradient(135deg, #28a745 0%, #218838 100%);
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+/* 按钮悬停时的样式 */
+button:hover {
+    background: linear-gradient(135deg, #218838 0%, #1e7e34 100%);
+    transform: scale(1.03);
+}
+
+/* 按钮点击时的样式 */
+button:active {
+    transform: scale(0.98);
+}
+
+/* 错误提示样式 */
+.error {
+    color: #dc3545;
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: 0.9em;
+}
+
+/* 成功提示样式 */
+.success {
+    color: #28a745;
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: 0.9em;
+}
+
+/* 显示密码按钮样式 */
+#showPasswordBtn {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    margin-left: 5px;
+    transition: color 0.3s ease;
+    position: absolute;
+    right: 10px; 
+    top: 50%;
+    transform: translateY(-50%); 
+    color: #28a745; /* 设置图标初始颜色为和登录按钮类似的蓝色 */
+    z-index: 10; 
+}
+
+body #showPasswordBtn i {
+    font-size: 2em; 
+    color: #28a745; 
+}
+
+
+#showPasswordBtn:hover {
+    color: #218838; /* 鼠标悬停时图标颜色变深，和按钮悬停效果一致 */
+}

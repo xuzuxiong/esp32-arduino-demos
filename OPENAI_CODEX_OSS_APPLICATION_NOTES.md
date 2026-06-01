@@ -1,92 +1,95 @@
 # OpenAI Codex for Open Source — 申请材料草稿
 
-> 本文档供维护者填写 OpenAI Codex for Open Source 申请时使用。内容基于项目**真实早期状态**，不夸大影响力。
+> 本文档供维护者填写 [Codex for OSS 表单](https://openai.com/form/codex-for-oss/) 时使用。内容基于项目**真实状态**，不夸大影响力。  
+> 最后更新：**v0.1.2**
+
+---
+
+## 表单字段 — 可直接复制（英文，各 ≤500 字符）
+
+### Why does this repository qualify?
+
+```
+I am the primary maintainer of an MIT-licensed ESP32 stack: firmware (PCM1808 I2S FFT + CH9329 HID) plus an optional sanitized Flask MQTT web backend. Includes wiring BOM/schematics, CI, minimal Arduino examples, and protocol docs. Early-stage but end-to-end reproducible for embedded developers.
+```
+
+### How will you use API credits for your project?
+
+```
+Maintain docs/code sync across hardware pin maps and CH9329 protocol notes; expand minimal examples; add Parser unit tests and CI; triage issues/FAQ; review PRs for leaked credentials; prepare KiCad schematic contributions. Codex reduces repetitive maintainer work so I can focus on clear, safe reference firmware for the embedded community.
+```
+
+### Anything else we should know?
+
+```
+Early-stage project (new public repo). Full stack: ESP32 firmware + optional Flask MQTT server (sanitized). Not claiming large star count. Secrets removed; configs use placeholders. Releases v0.1.x with CI compile workflow.
+```
 
 ---
 
 ## 1. 项目简介
 
-**esp32-arduino-demos** 是一个面向嵌入式开发者的开源参考项目，核心示例 **DECQ** 演示如何在 ESP32（Arduino 框架）上集成：
+**esp32-arduino-demos** — DECQ 固件 + 可选 Flask MQTT Web 服务端；ESP32 / PCM1808 I2S / CH9329 HID / OLED / MQTT。
 
-- **PCM1808** I2S 音频采集
-- **FFT + 低频能量** 声音事件检测
-- **CH9329** UART → USB HID 键鼠控制
-- SSD1306 OLED 菜单、物理按键、NVS 参数保存
-- 可选 WiFiManager / MQTT 远程状态同步
-
-仓库地址：https://github.com/xuzuxiong/esp32-arduino-demos
-
-许可证：**MIT**
+https://github.com/xuzuxiong/esp32-arduino-demos · **MIT**
 
 ---
 
 ## 2. Primary Maintainer 角色
 
-我是该仓库的 **Primary Maintainer**，负责：
-
-- 固件架构与引脚定义的维护
-- 文档（中英文 README、`docs/`）与开源合规（脱敏、LICENSE）
-- Issue / PR  triage 与版本发布
-- 将工程经验沉淀为可复现的最小示例，降低 ESP32 + I2S + HID 的学习门槛
+- 固件架构、引脚表、脱敏与 Release
+- 文档（README、`docs/`、`hardware/` BOM/接线图）
+- CI、minimal examples、Issue/PR triage
 
 ---
 
 ## 3. 对开源社区的价值
 
-| 价值点 | 说明 |
-|--------|------|
-| 硬件组合少见 | PCM1808 + CH9329 + ESP32 的完整接线与固件在同一仓库，便于对照学习 |
-| 真实工程代码 | 非 Hello World，包含 FFT 检测、HID 帧格式、NVS、可选 MQTT |
-| 文档齐全 | hardware / firmware / protocol / audio-detection / FAQ 分离 |
-| 可安全复现 | 敏感凭据已替换为占位符，config 与 example 分离 |
-| MIT 许可 | 允许社区 fork、改板、集成到其他项目 |
-
-本项目**不**声称已有大规模用户或商业部署；定位为 **early-stage reference implementation**。
+| 价值点 | v0.1.1 状态 |
+|--------|-------------|
+| 少见硬件栈 | PCM1808 + CH9329 + ESP32 完整接线 + 代码 |
+| 可复现 | CI 编译、libraries.txt、config 模板 |
+| 硬件文档 | BOM + wiring-schematic + block-diagram |
+| 学习路径 | 主固件 + 2 个 minimal `.ino` 示例 |
+| 诚实定位 | early-stage，不虚假宣传 |
 
 ---
 
 ## 4. Codex 将如何帮助维护
 
-| 维护任务 | Codex 辅助方式 |
-|----------|----------------|
-| 文档与代码同步 | 引脚 / 协议变更时更新 `docs/` 与 README |
-| 脱敏审查 | 扫描 PR 中是否含密码、内网 IP |
-| 拆分示例 | 从 DECQ 提取独立 minimal sketch（如纯 CH9329 demo） |
-| 测试与 CI | 生成 Parser 单元测试、arduino-cli CI 工作流 |
-| Issue 响应 | 根据 FAQ 与日志草稿回复常见问题 |
-| 国际化 | 保持中文为主、英文关键词便于 GitHub 搜索 |
+文档/引脚同步 · PR 脱敏审查 · 拆示例 · CI/测试 · FAQ/Issue · KiCad 原理图整理
 
 ---
 
 ## 5. 目前项目状态（如实）
 
-- **版本**：v0.1.0（首次公开整理）
-- **成熟度**：早期；主固件功能完整但菜单业务逻辑复杂，文档仍在完善
-- **支持平台**：仅 Arduino（ESP32 Core），无 PlatformIO / ESP-IDF
-- **硬件资料**：原理图 / PCB 尚未公开，仅有引脚表与接线说明
-- **服务端**：不包含 MQTT Web 后端；网络功能需用户自建 Broker
-- **测试**：无自动化测试，依赖硬件在环验证
-- **社区**：新开源仓库，无虚假宣传 star 或下载量
+- **版本**：v0.1.2（含 `server/mqtt_web_service/` 脱敏开源）
+- **CI**：GitHub Actions 编译 DECQ + examples
+- **硬件**：文字/框图接线图 + BOM（KiCad PDF 待贡献）
+- **无** 生产数据库备份；MQTT 服务端为参考实现
+- **新仓库**，生态影响力仍在积累
 
 ---
 
-## 6. 后续维护计划（6～12 个月）
+## 6. 后续计划
 
-1. **v0.2.x**：拆分 `examples/ch9329_keyboard/`、`examples/i2s_energy/` 最小 sketch
-2. 添加 GitHub Actions **compile-only** CI
-3. 补充 KiCad 原理图占位或社区贡献的 BOM
-4. 统一 MQTT 下行 JSON 协议文档与固件解析
-5. 根据 Issue 迭代 FAQ 与调参指南
-6. 评估 PlatformIO 支持（若社区有需求）
+KiCad 原理图 · Parser 单元测试 · PlatformIO（按需）· FAQ 迭代
 
 ---
 
 ## 7. 声明
 
-- 本仓库用于**学习与研究** ESP32 音频与 HID 集成。
-- 不包含商业授权、客户数据或生产服务器配置。
-- 使用者需自行承担部署与安全责任（见 README 免责声明）。
+学习与研究用途；无 WARRANTY；用户自行负责合规与安全。
 
 ---
 
-*最后更新：2026-06-01*
+## 预估通过率（维护者自检）
+
+| 维度 | v0.1.0 | v0.1.1 后 |
+|------|--------|-----------|
+| 仓库规范 | 较好 | 更好（CI + 脱敏完成） |
+| 生态影响力 | 弱 | 仍弱（新 repo） |
+| 叙事质量 | 中 | 中上（可强调完整 teaching stack） |
+| **综合建议** | 可申请 | **建议现在提交表单** |
+
+*OpenAI 滚动审核，无官方通过率；小项目需靠清晰叙事而非 star 数量。*

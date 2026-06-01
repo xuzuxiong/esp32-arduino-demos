@@ -81,6 +81,8 @@ struct Parsed {
 
 ## 3. MQTT 协议（可选，需开启网络模式）
 
+> 可选 Flask 配套服务端：`server/mqtt_web_service/`，详见 [server.md](server.md)。
+
 ### 连接
 
 - Broker / 端口 / 用户名 / 密码：见 `config.example.h`

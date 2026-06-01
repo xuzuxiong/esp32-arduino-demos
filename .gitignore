@@ -2,6 +2,7 @@
 firmware/DECQ/config.h
 examples/local_config.h
 
+
 # Arduino / ESP32 build artifacts
 *.elf
 *.bin
@@ -30,6 +31,13 @@ venv/
 credentials.json
 user_accounts.csv
 device_ids.txt
+
+# MQTT Web Service (server/)
+server/mqtt_web_service/.env
+server/mqtt_web_service/logs/
+server/mqtt_web_service/flask.log*
+server/mqtt_web_service/*.sql
+server/**/__pycache__/
 
 # arduino-cli downloaded locally inside sketch
 firmware/DECQ/tools/

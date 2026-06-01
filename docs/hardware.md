@@ -13,7 +13,7 @@
 | 输入 | 6 路物理按键（上拉输入） | 本地菜单控制 |
 | 指示 | GPIO 输出（Audio / WiFi 等） | 状态 LED 或继电器 |
 
-> 完整 BOM、原理图、PCB 尚未随仓库发布，见 [hardware/README.md](../hardware/README.md)。
+> 完整 BOM 与接线原理图见 [hardware/BOM.md](../hardware/BOM.md)、[hardware/wiring-schematic.md](../hardware/wiring-schematic.md)。
 
 ## 引脚连接（与当前固件一致）
 

@@ -1,0 +1,8 @@
+# Arduino Library Manager dependencies for firmware/DECQ
+# Install: arduino-cli lib install --library-name <name>
+arduinoFFT
+U8g2
+PubSubClient
+WiFiManager
+ArduinoJson
+CRC32
