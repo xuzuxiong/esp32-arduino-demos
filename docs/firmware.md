@@ -60,15 +60,7 @@ esp32:esp32:esp32:PartitionScheme=app3M_fat9M_16MB,CPUFreq=240,FlashMode=qio,Fla
 
 ## 配置
 
-1. 复制配置模板：
-
-   ```bash
-   cp firmware/DECQ/config.example.h firmware/DECQ/config.h
-   ```
-
-2. 编辑 `config.h`，填入你的 MQTT / OTA 占位或本地测试值。
-
-3. 若未创建 `config.h`，编译时会自动回退到 `config.example.h`（含示例占位符）。
+默认使用 `config.example.h` 占位符（`YOUR_*` / `192.168.1.100`）。可选：创建 `config.h` 覆盖本地值（已 gitignore）。
 
 ## 编译与烧录
 

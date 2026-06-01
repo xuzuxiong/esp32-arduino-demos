@@ -37,7 +37,7 @@
 | 网络（可选） | WiFiManager 配网、MQTT 状态 JSON、远程 pause/resume、HTTP OTA 钩子 |
 | 配套服务端 | Flask MQTT Web 控制台（`server/mqtt_web_service/`，可选自建） |
 | 工具 | Windows `arduino-cli` 一键编译烧录脚本 |
-| CI | 工作流模板见 `tools/ci/compile.yml`（复制到 `.github/workflows/` 启用） |
+| CI | 参考模板 `tools/ci/compile.yml`（占位，维护者可选用） |
 | 硬件文档 | BOM、接线原理图、系统框图（`hardware/`） |
 | 最小示例 | `examples/ch9329_mouse/`、`examples/i2s_energy_detect/` |
 
@@ -101,24 +101,19 @@ git clone https://github.com/xuzuxiong/esp32-arduino-demos.git
 cd esp32-arduino-demos
 ```
 
-1. **（推荐）** 复制配置模板：
+1. **安装 Arduino 依赖库**（Library Manager，见 [docs/firmware.md](docs/firmware.md)）
 
-   ```bash
-   cp firmware/DECQ/config.example.h firmware/DECQ/config.h
-   # 编辑 config.h，填入本地 MQTT 占位值（若使用网络功能）
-   ```
-
-2. **安装依赖库**（Arduino Library Manager）
-
-3. **编译烧录**
+2. **编译烧录**（配置已内置占位符，无需复制 `config.h`）
 
    ```powershell
    .\tools\build_upload.ps1 -Port COM6
    ```
 
-   或用 Arduino IDE 打开 `firmware/DECQ/DECQ.ino`，选择 **ESP32 Dev Module** + **App 3MB / FAT 9MB (16MB Flash)**。
+   或用 Arduino IDE 打开 `firmware/DECQ/DECQ.ino`。
 
-4. 打开 Serial Monitor **115200**，记录 `Device ID: CQxxxxxx`
+3. Serial Monitor **115200** 查看 `Device ID: CQxxxxxx`
+
+> 备注：未创建 `config.h` 时自动使用 `config.example.h` 中的 `YOUR_*` / `192.168.1.100` 占位值。上线前再改真实 Broker 即可。
 
 ---
 
@@ -126,9 +121,10 @@ cd esp32-arduino-demos
 
 | 文件 | 说明 |
 |------|------|
-| `firmware/DECQ/config.example.h` | 提交的模板（占位符） |
-| `firmware/DECQ/config.h` | 本地配置（**已 gitignore，勿提交真实密码**） |
-| `examples/basic_config.example.h` | 与上相同的示例副本 |
+| `firmware/DECQ/config.example.h` | 默认占位配置（已提交） |
+| `firmware/DECQ/config.h` | 可选本地覆盖（gitignore，勿提交真实密码） |
+
+未提供 `config.h` 时编译自动回退到 `config.example.h`。
 
 主要宏：
 

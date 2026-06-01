@@ -24,8 +24,10 @@ cd server/mqtt_web_service
 python -m venv venv
 source venv/bin/activate   # Windows: venv\Scripts\activate
 pip install -r requirements.txt
-cp .env.example .env       # 编辑占位符
+python run.py
 ```
+
+> 备注：无 `.env` 时自动加载 `.env.example` 占位符。生产部署时再创建 `.env` 填入真实数据库与 MQTT 凭据。
 
 ### PostgreSQL
 

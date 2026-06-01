@@ -8,7 +8,7 @@
 
 ### Q: 找不到 `config.h`？
 
-**A:** 复制 `firmware/DECQ/config.example.h` 为 `config.h`。未复制时编译会自动使用 example 中的占位符。
+**A:** 无需复制。未提供 `config.h` 时自动使用 `config.example.h` 占位符。
 
 ### Q: 缺少 arduinoFFT / U8g2 等库？
 
@@ -78,7 +78,7 @@
 
 ### Q: 本仓库有 MQTT 服务端吗？
 
-**A:** 仓库 **v0.1.2+** 含可选参考实现 `server/mqtt_web_service/`（Flask + PostgreSQL + MQTT）。生产环境请复制 `.env.example` 自行部署，勿使用示例占位符。
+**A:** 仓库含 `server/mqtt_web_service/` 参考实现。无 `.env` 时自动加载 `.env.example` 占位符；生产环境再创建 `.env` 填入真实凭据。
 
 ---
 

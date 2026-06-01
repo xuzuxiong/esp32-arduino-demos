@@ -2,11 +2,13 @@
 import sys
 import os
 import logging
-from dotenv import load_dotenv
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from logging.handlers import RotatingFileHandler
+
+from env_loader import load_app_env
+load_app_env()
 
 from .celery import make_celery
 from .extensions import db
@@ -28,8 +30,7 @@ from flask_login import LoginManager
 from app.models.user import User
 from datetime import datetime
 
-# 加载环境变量
-load_dotenv()
+# 环境变量：优先 .env，无则自动使用 .env.example 占位符（见 env_loader.py）
 
 # 初始化 LoginManager
 login_manager = LoginManager()

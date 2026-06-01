@@ -1,8 +1,8 @@
-from dotenv import load_dotenv
+from env_loader import load_app_env
 from app import create_app
 import os
 
-load_dotenv()
+load_app_env()
 
 app = create_app()
 

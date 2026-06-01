@@ -30,11 +30,7 @@ flowchart LR
 
 ## 配置
 
-复制并编辑：
-
-```bash
-cp server/mqtt_web_service/.env.example server/mqtt_web_service/.env
-```
+无 `.env` 时自动加载 `.env.example` 占位符。生产部署时创建 `.env` 并填入真实 PostgreSQL / MQTT 凭据即可。
 
 | 变量 | 说明 |
 |------|------|
