@@ -22,7 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- GitHub Actions compile workflow for DECQ + minimal examples
+- GitHub Actions **reference CI template** at `tools/ci/compile.yml` (not enabled by default)
 - `firmware/DECQ/libraries.txt` dependency list
 - Hardware BOM, wiring schematic, block diagram under `hardware/`
 - Minimal examples: `examples/ch9329_mouse/`, `examples/i2s_energy_detect/`
