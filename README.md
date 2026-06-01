@@ -4,6 +4,10 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
+### English Summary
+
+**esp32-arduino-demos** is an **early-stage MIT reference** (release **v0.1.2**) for **ESP32-WROOM (16 MB Flash, Arduino only)** integrating **PCM1808 I2S** (48 kHz), **FFT low-band energy detection** (tunable thresholds), **CH9329 UART HID** (keyboard/mouse/scroll), **SSD1306 + keypad + NVS**, optional **MQTT** status/control and **HTTP OTA hooks**, plus an **optional sanitized Flask/MQTT backend** (`server/mqtt_web_service/`). Placeholder configs ship by default (`config.example.h`, `.env.example`); replace before production. CI is a **reference template** only (`tools/ci/compile.yml`). Not production-ready—intended for learning, prototyping, and reproducible integration reference.
+
 > 基于 ESP32 / Arduino / PCM1808 (I2S) / CH9329 的可复用固件示例，帮助开发者学习音频事件检测、串口 HID 键鼠控制与可选 MQTT 远程管理。  
 > English keywords: `esp32` `arduino` `i2s` `pcm1808` `ch9329` `hid` `audio-detection` `embedded`
 
@@ -172,7 +176,7 @@ MQTT connected
 
 | 版本 | 目标 |
 |------|------|
-| **v0.1.x** | 开源整理、文档、脱敏、DECQ 主固件、CI、BOM/接线图、minimal examples |
+| **v0.1.x** | 开源整理、文档、脱敏、DECQ 主固件、BOM/接线图、minimal examples、CI 参考模板 |
 | v0.2.x | KiCad 原理图、Parser 单元测试 |
 | v0.3.x | 硬件原理图 / BOM 社区贡献 |
 | 未来 | PlatformIO、Parser 单元测试 |
