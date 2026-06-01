@@ -1,0 +1,35 @@
+# Local firmware configuration (copy from config.example.h)
+firmware/DECQ/config.h
+examples/local_config.h
+
+# Arduino / ESP32 build artifacts
+*.elf
+*.bin
+*.map
+build/
+.pio/
+.vscode/.browse.c_cpp.db*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.env
+*.log
+
+# Secrets and local data
+*.pem
+*.key
+credentials.json
+user_accounts.csv
+device_ids.txt
+
+# arduino-cli downloaded locally inside sketch
+firmware/DECQ/tools/

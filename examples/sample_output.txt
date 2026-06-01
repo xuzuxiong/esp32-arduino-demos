@@ -1,0 +1,35 @@
+=== DECQ firmware boot log (example, sanitized) ===
+
+Device ID: CQ1A2B3C
+I2S driver installed
+WiFi connected
+192.168.1.50
+Connecting to MQTT...
+MQTT connected
+[MQTT] sync {"online":true,"running":true,"menu":0,"mode":"auto","uptime_sec":12,...}
+
+=== Audio detection (manual test) ===
+
+(low frequency energy below threshold — no output)
+
+=== CH9329 frame trace (logic analyzer) ===
+
+57 AB 00 04 07 02 00 A0 0A B4 00 00 XX   ; sendAbsMouse(800,180)
+57 AB 00 02 08 00 00 1E 00 00 00 00 00 XX ; sendKey(KEY_1)
+
+=== MQTT control (example) ===
+
+[MQTT] control pause
+[MQTT] sync {"online":true,"running":false,...}
+
+=== OTA (example) ===
+
+HTTP request failed: 404
+; or on success:
+Firmware update progress on OLED...
+(reboot)
+
+=== Notes ===
+
+- Timestamps and JSON fields vary by NVS settings and runtime state.
+- Replace CQ1A2B3C with your device ID from Serial on first boot.
